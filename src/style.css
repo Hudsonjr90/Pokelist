@@ -1,0 +1,221 @@
+:root {
+  --grass: #5fbd58;
+  --bug: #92bc2c;
+  --dark: #595761;
+  --dragon: #0c69c8;
+  --electric: #f2d94e;
+  --fairy: #ee90e6;
+  --fighting: #d3425f;
+  --fire: #dc872f;
+  --flying: #a1bbec;
+  --ghost: #5f6dbc;
+  --ground: #da7c4d;
+  --ice: #75d0c1;
+  --normal: #a0a29f;
+  --poison: #b763cf;
+  --psychic: #ff2ca8;
+  --rock: #a38c21;
+  --steel: #5695a3;
+  --water: #539ddf;
+}
+
+.grass {
+  background: var(--grass);
+  box-shadow: 0 0 20px var(--grass);
+}
+
+.bug {
+  background: var(--bug);
+  box-shadow: 0 0 20px var(--bug);
+}
+
+.dark {
+  background: var(--dark);
+  box-shadow: 0 0 20px var(--dark);
+}
+
+.dragon {
+  background: var(--dragon);
+  box-shadow: 0 0 20px var(--dragon);
+}
+
+.electric {
+  background: var(--electric);
+  box-shadow: 0 0 20px #796d26;
+}
+
+.fairy {
+  background: var(--fairy);
+  box-shadow: 0 0 20px var(--fairy);
+}
+
+.fighting {
+  background: var(--fighting);
+  box-shadow: 0 0 20px var(--fighting);
+}
+
+.flying {
+  background: var(--flying);
+  box-shadow: 0 0 20px var(--flying);
+}
+
+.ghost {
+  background: var(--ghost);
+  box-shadow: 0 0 20px var(--ghost);
+}
+
+.ground {
+  background: var(--ground);
+  box-shadow: 0 0 20px var(--ground);
+}
+
+.ice {
+  background: var(--ice);
+  box-shadow: 0 0 20px var(--ice);
+}
+
+.normal {
+  background: var(--normal);
+  box-shadow: 0 0 20px var(--normal);
+}
+
+.poison {
+  background: var(--poison);
+  box-shadow: 0 0 20px var(--poison);
+}
+
+.psychic {
+  background: var(--psychic);
+  box-shadow: 0 0 20px var(--psychic);
+}
+
+.rock {
+  background: var(--rock);
+  box-shadow: 0 0 20px var(--rock);
+}
+
+.steel {
+  background: var(--steel);
+  box-shadow: 0 0 20px var(--steel);
+}
+
+.water {
+  background: var(--water);
+  box-shadow: 0 0 20px var(--water);
+}
+
+.fire {
+  background: var(--fire);
+  box-shadow: 0 0 20px var(--fire);
+}
+
+html {
+  --toggle: hsl(230deg 17% 85%);
+  --bggradient: url("../src/assets/images/bg-light.png");
+  --bgcolor: none;
+  --colorPrimary: #000;
+  --filterHeading: #000;
+  --selectBg : #fff;
+  --selectText : #000;
+  --pokename: #000;
+    --cardborder: #fff;
+    --pokenumber: hsl(228, 28%, 20%);
+    --info: #fff
+}
+
+html[data-theme=dark] {
+  --toggle: linear-gradient(90deg, hsl(216deg 52% 48%), hsl(51deg 100% 60%));
+  --bggradient: none;
+  --bgcolor: #16171f;
+  --colorPrimary: #fff;
+  --filterHeading: #fff;
+  --selectBg : #16171f;
+  --selectText : #fff
+  --pokename: hsl(228, 28%, 20%);
+  --cardborder: hsl(228, 28%, 20%);
+  --pokenumber: hsl(228, 28%, 20%);
+  --info: hsl(228, 28%, 20%);
+}
+
+html ::-webkit-scrollbar {
+  width: .9rem;
+  background: #efeef6
+}
+
+html ::-webkit-scrollbar-thumb {
+  background: #eee01c
+}
+
+
+@font-face {
+  font-family: 'barcadebrawl';
+  src: url('../src/assets/fonts/BarcadeBrawl.ttf');
+}
+
+body {
+  margin: 0;
+  background-image: var(--bggradient);
+  background-color: var(--bgcolor);
+  background-repeat: repeat;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 1s ease;
+}
+
+
+.v-card {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.v-card:hover {
+  transform: scale(1.05);
+}
+
+.v-card-title{
+  font-family: 'Press Start 2P', cursive;
+  color: var(--pokename);
+}
+
+.v-card-subtitle{
+  border-radius: 1rem;
+  padding: 0.2rem 0.4rem;
+  font-weight: 400;
+  font-size: 35px;
+  color: var(--pokenumber);
+  font-family: 'Teko', sans-serif;
+}
+
+.back_button{
+  background-color: #dadada;
+}
+
+.type-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.type_bg {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.type_bg img {
+  width: 20px;
+  height: 20px;
+}
+
+.scroll_btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
