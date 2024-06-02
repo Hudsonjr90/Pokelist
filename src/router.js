@@ -1,3 +1,5 @@
+//router.js
+
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from './views/Home.vue';
 import Pokemon from './views/Pokemon.vue';

@@ -94,7 +94,7 @@ export default {
       selectedRegion: null,
       selectedType: null,
       sortBy: "id",
-      limit: 151,
+      limit: 21,
       offset: 0,
       showScrollToTop: false,
       regions: [
