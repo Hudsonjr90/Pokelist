@@ -5,7 +5,7 @@
         <v-text-field
           v-model="search"
           append-inner-icon="mdi-magnify"
-          label="Search a pokemon"
+          label="Find pokemon"
           variant="outlined"
           width="100%"
         ></v-text-field>
@@ -253,3 +253,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-text-field,
+.v-select,
+.v-radio{
+  color: var(--filters);
+  font-family: 'Press Start 2P', cursive;
+}
+
+.v-icon{
+  color: var(--filters);
+}
+</style>

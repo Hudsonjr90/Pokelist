@@ -33,7 +33,7 @@
             </v-col>
 
             <!-- Right Column: Additional Info -->
-            <v-col cols="12" md="8" class="right-column">
+            <v-col cols="12" md="6" class="right-column">
               <v-card-text>
                 <div class="abilities-section">
                   <h3>Abilities</h3>
@@ -122,18 +122,19 @@ export default {
 };
 </script>
 
-
 <style scoped>
+
 .v-card-text p{
   font-family: 'Press Start 2P', cursive;
   font-size: 0.8rem;
-  color: var(--pokename);
+  color: var(--colorPrimary);
 }
 
 .pokemon-card {
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  color: var(--colorPrimary);
 }
 
 .left-column {
@@ -141,20 +142,18 @@ export default {
 }
 
 .right-column {
-  padding: 16px;
+  padding: 1.6rem;
 }
 
-
-.about-section,
 .abilities-section,
-.stats-section,
-.evolution-section {
+.stats-section {
   margin-top: 16px;
 }
 
 h3 {
   margin: 8px 0;
   font-family: 'Press Start 2P', cursive;
+  color: var(--colorPrimary);
 }
 
 ul {

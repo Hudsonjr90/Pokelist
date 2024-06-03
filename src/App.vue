@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app v-if="!loading">
-      <v-app-bar app>
+      <v-app-bar app :class="{ 'theme--dark': isDarkTheme, 'theme--light': !isDarkTheme }">
         <v-toolbar-title @click="goHome" style="cursor: pointer;">
           <img
             src="./assets/images/pokedex.png"
@@ -14,9 +14,7 @@
           <v-icon>mdi-history</v-icon>
         </v-btn>
         <v-btn icon @click="toggleTheme">
-          <v-icon>{{
-            $vuetify.theme.dark ? "mdi-weather-sunny" : "mdi-weather-night"
-          }}</v-icon>
+          <v-icon>{{ isDarkTheme ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
         </v-btn>
       </v-app-bar>
       <v-main>
@@ -38,24 +36,39 @@
 export default {
   data() {
     return {
+      isDarkTheme: false,
       loading: true,
     };
   },
   methods: {
     toggleTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      this.isDarkTheme = !this.isDarkTheme;
+      this.$vuetify.theme.dark = this.isDarkTheme;
+      document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');    },
+    viewVisitedPokemons() {
+      this.$router.push({ path: "/recently-viewed" });
     },
     goHome() {
       this.$router.push({ path: "/" });
     },
-    viewVisitedPokemons() {
-      this.$router.push({ path: "/recently-viewed" });
-    },
   },
-  mounted() {
+  mounted(){
     setTimeout(() => {
       this.loading = false;
     }, 2000);
+  },
+  created() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.isDarkTheme = savedTheme === 'dark';
+      this.$vuetify.theme.dark = this.isDarkTheme;
+      document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
+    }
+  },
+  watch: {
+    isDarkTheme(newVal) {
+      localStorage.setItem('theme', newVal ? 'dark' : 'light');
+    },
   },
 };
 </script>
@@ -72,6 +85,9 @@ export default {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background-image: var(--bggradient);
+  background-color: var(--bgcolor);
+  background-repeat: repeat;
 }
 .loading-gif {
   width: 100px;

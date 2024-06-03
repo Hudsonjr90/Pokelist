@@ -17,7 +17,30 @@
   --rock: #a38c21;
   --steel: #5695a3;
   --water: #539ddf;
+  --toggle: hsl(230deg 17% 85%);
+  --bggradient: url("./assets/images/bg-light.png");
+  --bgcolor: #fff;
+  --colorPrimary:#16171f;
+  --filters: #16171f;
 }
+
+[data-theme=dark] {
+  --toggle: linear-gradient(90deg, hsl(216deg 52% 48%), hsl(51deg 100% 60%));
+  --bggradient: none;
+  --bgcolor: #16171f;
+  --colorPrimary: #700791;
+  --filters: #fff;
+}
+
+html ::-webkit-scrollbar {
+  width: .9rem;
+  background: #efeef6
+}
+
+html ::-webkit-scrollbar-thumb {
+  background: #eee01c
+}
+
 
 .grass {
   background: var(--grass);
@@ -109,60 +132,20 @@
   box-shadow: 0 0 20px var(--fire);
 }
 
-html {
-  --toggle: hsl(230deg 17% 85%);
-  --bggradient: url("../src/assets/images/bg-light.png");
-  --bgcolor: none;
-  --colorPrimary: #000;
-  --filterHeading: #000;
-  --selectBg : #fff;
-  --selectText : #000;
-  --pokename: #000;
-    --cardborder: #fff;
-    --pokenumber: hsl(228, 28%, 20%);
-    --info: #fff
-}
 
-html[data-theme=dark] {
-  --toggle: linear-gradient(90deg, hsl(216deg 52% 48%), hsl(51deg 100% 60%));
-  --bggradient: none;
-  --bgcolor: #16171f;
-  --colorPrimary: #fff;
-  --filterHeading: #fff;
-  --selectBg : #16171f;
-  --selectText : #fff
-  --pokename: hsl(228, 28%, 20%);
-  --cardborder: hsl(228, 28%, 20%);
-  --pokenumber: hsl(228, 28%, 20%);
-  --info: hsl(228, 28%, 20%);
-}
-
-html ::-webkit-scrollbar {
-  width: .9rem;
-  background: #efeef6
-}
-
-html ::-webkit-scrollbar-thumb {
-  background: #eee01c
-}
-
-
-@font-face {
-  font-family: 'barcadebrawl';
-  src: url('../src/assets/fonts/BarcadeBrawl.ttf');
-}
-
-body {
-  margin: 0;
+.v-main, .v-app-bar{
   background-image: var(--bggradient);
   background-color: var(--bgcolor);
   background-repeat: repeat;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background 1s ease;
 }
 
+.v-card-title{
+  color: var(--colorPrimary);
+  font-family: 'Press Start 2P', cursive;
+}
 
 .v-card {
   cursor: pointer;
@@ -172,22 +155,18 @@ body {
   transform: scale(1.05);
 }
 
-.v-card-title{
-  font-family: 'Press Start 2P', cursive;
-  color: var(--pokename);
-}
-
-.v-card-subtitle{
+.v-card-subtitle {
   border-radius: 1rem;
   padding: 0.2rem 0.4rem;
-  font-weight: 400;
-  font-size: 35px;
-  color: var(--pokenumber);
-  font-family: 'Teko', sans-serif;
+  font: 700 1.3rem 'Press Start 2P', cursive;
+  color: var(--colorPrimary);
+ 
 }
 
-.back_button{
-  background-color: #dadada;
+.back_button {
+  border: 1px solid var(--colorPrimary);
+  color: var(--colorPrimary);
+  font-family: 'Press Start 2P', cursive;
 }
 
 .type-container {

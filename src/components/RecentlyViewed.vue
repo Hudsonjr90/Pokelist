@@ -72,5 +72,7 @@ export default {
 <style scoped>
 .v-btn {
   margin-top: 15px;
+  border: 1px solid var(--colorPrimary);
 }
+
 </style>
