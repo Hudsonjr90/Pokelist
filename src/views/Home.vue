@@ -38,7 +38,7 @@
     </v-row>
     <v-row v-if="!selectedRegion" justify="center" class="info_container">
       <v-col cols="12" align="center">
-        <v-alert type="warning">Please select a region</v-alert>
+        <v-alert type="info">Please select a region</v-alert>
       </v-col>
     </v-row>
     <v-row v-if="isLoadingPokemon" justify="center">
@@ -51,7 +51,15 @@
         />
       </v-col>
     </v-row>
-    <v-row v-if="sortedFilteredPokemons.length === 0 && !isLoadingPokemon && selectedRegion" justify="center" class="info_container">
+    <v-row
+      v-if="
+        sortedFilteredPokemons.length === 0 &&
+        !isLoadingPokemon &&
+        selectedRegion
+      "
+      justify="center"
+      class="info_container"
+    >
       <v-col cols="12" align="center">
         <v-alert type="info">There are no pokemon in this region</v-alert>
         <img
@@ -62,11 +70,10 @@
         />
       </v-col>
     </v-row>
-    
     <v-row>
       <v-col
-        v-for="pokemon in sortedFilteredPokemons"
-        :key="pokemon.id"
+        v-for="pokemon in paginatedPokemons"
+        :key="pokemon.id + '-' + pokemon.name"
         cols="12"
         sm="6"
         md="4"
@@ -104,6 +111,12 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-pagination
+      v-model="currentPage"
+      :length="pageCount"
+      @input="changePage"
+      class="mt-4"
+    ></v-pagination>
     <v-icon
       icon="mdi-arrow-up-bold-circle-outline"
       size="50"
@@ -117,6 +130,8 @@
 <script>
 import axios from "axios";
 import { colorTypeGradients } from "../utils";
+
+const pokemonCache = {};
 
 export default {
   name: "Home",
@@ -132,6 +147,8 @@ export default {
       showScrollToTop: false,
       isLoading: false,
       isLoadingPokemon: false,
+      currentPage: 1,
+      perPage: 21,
       regions: [
         {
           name: "Kanto",
@@ -223,28 +240,45 @@ export default {
 
       return filteredPokemons;
     },
+    paginatedPokemons() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.sortedFilteredPokemons.slice(start, end);
+    },
+    pageCount() {
+      return Math.ceil(this.sortedFilteredPokemons.length / this.perPage);
+    },
   },
-
   methods: {
     async fetchPokemons(limit, offset) {
       try {
         const promises = [];
         for (let i = offset + 1; i <= offset + limit; i++) {
-          promises.push(axios.get(`https://pokeapi.co/api/v2/pokemon/${i}`));
+          if (pokemonCache[i]) {
+            promises.push(Promise.resolve(pokemonCache[i]));
+          } else {
+            promises.push(
+              axios
+                .get(`https://pokeapi.co/api/v2/pokemon/${i}`)
+                .then((response) => {
+                  pokemonCache[i] = response.data;
+                  return response.data;
+                })
+            );
+          }
         }
         const responses = await Promise.all(promises);
-        this.pokemons = [
-          ...this.pokemons,
-          ...responses.map((response) => response.data),
-        ];
+        this.pokemons = responses;
       } catch (error) {
         console.error("Error fetching pokemons:", error);
       }
     },
     viewPokemon(id) {
+      const currentPage = this.currentPage;
       if (this.sortedFilteredPokemons.length === 0) {
         this.isLoadingPokemon = true;
       }
+      localStorage.setItem("currentPage", currentPage);
       this.$router.push({ path: `/pokemon/${id}` });
     },
     getPokemonGradient(types) {
@@ -265,6 +299,7 @@ export default {
         !this.isLoading &&
         this.pokemons.length <
           this.regions.find((region) => region.name === this.selectedRegion)
+            .limit
       ) {
         this.isLoading = true;
         this.offset += this.limit;
@@ -277,15 +312,18 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
+    changePage(page) {
+      this.currentPage = page;
+    },
     async fetchRegionPokemons() {
       const region = this.regions.find((r) => r.name === this.selectedRegion);
       if (region) {
         this.limit = region.limit;
         this.offset = region.offset;
         this.pokemons = [];
-        this.isLoadingPokemon = true; 
+        this.isLoadingPokemon = true;
         await this.fetchPokemons(this.limit, this.offset);
-        this.isLoadingPokemon = false; 
+        this.isLoadingPokemon = false;
       }
     },
     saveSelections() {
@@ -303,14 +341,20 @@ export default {
     selectedRegion() {
       this.saveSelections();
       this.fetchRegionPokemons();
+      this.currentPage = 1;
     },
     selectedType() {
       this.saveSelections();
+      this.currentPage = 1;
+    },
+    currentPage() {
+      this.scrollToTop();
     },
   },
   async created() {
     this.loadSelections();
-    this.fetchPokemons();
+    await this.fetchRegionPokemons();
+    this.currentPage = Number(localStorage.getItem("currentPage")) || 1;
     window.addEventListener("scroll", this.handleScroll);
   },
   beforeDestroy() {
@@ -323,6 +367,7 @@ export default {
 .v-text-field,
 .v-radio,
 .select_font,
+.v-pagination,
 h1 {
   color: var(--filters);
   font-family: "Press Start 2P", cursive;
@@ -337,7 +382,7 @@ h1 {
   color: var(--filters);
 }
 
-.info_container{
+.info_container {
   margin-top: 3rem;
 }
 </style>
