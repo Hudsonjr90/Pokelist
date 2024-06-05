@@ -5,3 +5,13 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (previously Volar) and disable Vetur
+
+## Run locally
+
+- Clone this repo
+
+- Run `npm install` 'or `yarn` 
+
+- Run `npm run dev` or `yarn dev`
+
+- The application opens in `http://localhost:5173/` or any other available port.
