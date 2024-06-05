@@ -20,27 +20,32 @@
   --toggle: hsl(230deg 17% 85%);
   --bggradient: url("./assets/images/bg-light.png");
   --bgcolor: #fff;
+  --navbgcolor: #eee01c;
   --colorPrimary:#16171f;
   --filters: #16171f;
+  --scroll: #eee01c;
 }
 
 [data-theme=dark] {
   --toggle: linear-gradient(90deg, hsl(216deg 52% 48%), hsl(51deg 100% 60%));
   --bggradient: none;
+  --navbg: none;
   --bgcolor: #16171f;
+  --navbgcolor: #700791;
   --colorPrimary: #700791;
   --filters: #fff;
+  --scroll: #700791;
+
 }
 
-html ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: .9rem;
   background: #efeef6
 }
 
-html ::-webkit-scrollbar-thumb {
-  background: #eee01c
+::-webkit-scrollbar-thumb {
+  background: var(--scroll)
 }
-
 
 .grass {
   background: var(--grass);

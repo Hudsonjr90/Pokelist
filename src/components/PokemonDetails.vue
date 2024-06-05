@@ -1,12 +1,20 @@
 <template>
   <v-container v-if="pokemon">
     <v-row justify="center">
+      <h1>Details</h1>
+    </v-row>
+    <v-row justify="center">
       <v-col cols="12" md="8">
-        <v-card :style="{ background: getPokemonGradient(pokemon.types) }" class="pokemon-card">
+        <v-card
+          :style="{ background: getPokemonGradient(pokemon.types) }"
+          class="pokemon-card"
+        >
           <v-row>
             <!-- Left Column: Basic Info -->
-            <v-col cols="12" md="4" class="left-column">
-              <v-card-subtitle> # {{ String(pokemon.id).padStart(2, "0") }}</v-card-subtitle>
+            <v-col cols="12" md="5" class="left-column">
+              <v-card-subtitle>
+                # {{ String(pokemon.id).padStart(2, "0") }}</v-card-subtitle
+              >
               <v-img
                 :src="pokemon.sprites.other['official-artwork'].front_default"
                 height="200px"
@@ -22,6 +30,7 @@
                     v-for="type in pokemon.types"
                     :key="type.type.name"
                     :class="[`type_bg ${type.type.name}`]"
+                    v-tooltip:bottom="type.type.name"
                   >
                     <img
                       :src="`/pokeTypes/${type.type.name}.png`"
@@ -51,7 +60,8 @@
                   <h3>Basic Stats</h3>
                   <ul>
                     <li v-for="stat in pokemon.stats" :key="stat.stat.name">
-                      <strong>{{ stat.stat.name.toUpperCase() }}:</strong> {{ stat.base_stat }}
+                      <strong>{{ stat.stat.name.toUpperCase() }}:</strong>
+                      {{ stat.base_stat }}
                     </li>
                   </ul>
                 </div>
@@ -59,16 +69,11 @@
             </v-col>
           </v-row>
           <v-card-actions>
-            <v-btn class="back_button" @click="$router.back()">Back</v-btn>
+            <v-btn class="back_button" @click="$router.back()">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
-  <v-container v-else>
-    <v-row justify="center">
-      <v-col cols="12" md="8">
-        <v-alert type="info">Loading...</v-alert>
       </v-col>
     </v-row>
   </v-container>
@@ -77,13 +82,13 @@
 <script>
 import axios from "axios";
 import { colorTypeGradients } from "../utils";
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 export default {
   name: "PokemonDetails",
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
     },
   },
@@ -101,7 +106,7 @@ export default {
       this.addVisitedPokemon({
         id: this.pokemon.id,
         name: this.pokemon.name,
-        image: this.pokemon.sprites.other['official-artwork'].front_default,
+        image: this.pokemon.sprites.other["official-artwork"].front_default,
         types: this.pokemon.types,
       });
     } catch (error) {
@@ -109,7 +114,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addVisitedPokemon']),
+    ...mapActions(["addVisitedPokemon"]),
     getPokemonGradient(types) {
       const typeNames = types.map((type) => type.type.name);
       return `linear-gradient(${colorTypeGradients(
@@ -123,9 +128,8 @@ export default {
 </script>
 
 <style scoped>
-
-.v-card-text p{
-  font-family: 'Press Start 2P', cursive;
+.v-card-text p {
+  font-family: "Press Start 2P", cursive;
   font-size: 0.8rem;
   color: var(--colorPrimary);
 }
@@ -150,23 +154,29 @@ export default {
   margin-top: 16px;
 }
 
+h1 {
+  color: var(--filters);
+  font-family: "Press Start 2P", cursive;
+  margin: 1rem;
+}
+
 h3 {
   margin: 8px 0;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   color: var(--colorPrimary);
 }
 
 ul {
   padding: 0;
   list-style: none;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
 ul li {
   margin: 4px 0;
 }
 
-.ability_list{
+.ability_list {
   list-style: circle;
   margin-left: 15px;
 }

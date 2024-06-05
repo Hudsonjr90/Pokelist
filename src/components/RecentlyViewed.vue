@@ -1,10 +1,17 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col v-if="visitedPokemon.length === 0" cols="12">
-        <v-alert type="info">
-          No Pokémon has been viewed yet.
-        </v-alert>
+    <v-row justify="center">
+      <h1>History</h1>
+    </v-row>
+    <v-row justify="center">
+      <v-col v-if="visitedPokemon.length === 0" cols="6" align="center">
+        <v-alert type="info"> Nothing seen yet </v-alert>
+        <img
+        src="../assets/images/cute.gif"
+        class="loading-gif noselect"
+        alt="loading-gif"
+        width="50%"
+      />
       </v-col>
       <template v-else>
         <v-col
@@ -27,16 +34,17 @@
         </v-col>
       </template>
     </v-row>
-    <v-btn icon @click="goBack">
+    <v-btn icon @click="$router.back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
   </v-container>
+  
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { colorTypeGradients } from "../utils";
 
 export default {
@@ -47,7 +55,7 @@ export default {
 
     const visitedPokemon = computed(() => store.state.visitedPokemon);
 
-    const viewPokemon = id => {
+    const viewPokemon = (id) => {
       router.push(`/pokemon/${id}`);
     };
 
@@ -62,9 +70,6 @@ export default {
         typeNames.length
       ).join(", ")})`;
     },
-    goBack() {
-      this.$router.push({ path: "/" });
-    },
   }
 };
 </script>
@@ -75,4 +80,14 @@ export default {
   border: 1px solid var(--colorPrimary);
 }
 
+.v-alert {
+  font-family: "Press Start 2P", cursive;
+  margin-bottom: 2rem;
+}
+
+h1{
+  color: var(--filters);
+  font-family: "Press Start 2P", cursive;
+  margin: 2rem;
+}
 </style>

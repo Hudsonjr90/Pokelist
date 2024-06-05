@@ -8,7 +8,7 @@ import RecentlyViewed from './components/RecentlyViewed.vue';
 const routes = [
   { path: '/', component: Home },
   { path: '/pokemon/:id', component: Pokemon },
-  { path: '/recently-viewed', component: RecentlyViewed}
+  { path: '/history', component: RecentlyViewed}
 ];
 
 const router = createRouter({

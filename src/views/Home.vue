@@ -5,7 +5,7 @@
         <v-text-field
           v-model="search"
           append-inner-icon="mdi-magnify"
-          label="Find pokemon"
+          label="Find pokémon"
           variant="outlined"
           width="100%"
         ></v-text-field>
@@ -14,14 +14,16 @@
         <v-select
           v-model="selectedRegion"
           :items="regions.map((region) => region.name)"
-          label="Select Region"
+          class="select_font"
+          label="Region"
         ></v-select>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <v-select
           v-model="selectedType"
           :items="types.map((type) => type.name)"
-          label="Select Type"
+          class="select_font"
+          label="Type"
         ></v-select>
       </v-col>
       <v-col cols="12" sm="6" md="3">
@@ -31,6 +33,36 @@
         </v-radio-group>
       </v-col>
     </v-row>
+    <v-row justify="start">
+      <h1>List</h1>
+    </v-row>
+    <v-row v-if="!selectedRegion" justify="center" class="info_container">
+      <v-col cols="12" align="center">
+        <v-alert type="warning">Please select a region</v-alert>
+      </v-col>
+    </v-row>
+    <v-row v-if="isLoadingPokemon" justify="center">
+      <v-col cols="12" align="center">
+        <img
+          src="../assets/images/pokeball.gif"
+          class="loading-gif noselect"
+          alt="loading-gif"
+          width="50%"
+        />
+      </v-col>
+    </v-row>
+    <v-row v-if="sortedFilteredPokemons.length === 0 && !isLoadingPokemon && selectedRegion" justify="center" class="info_container">
+      <v-col cols="12" align="center">
+        <v-alert type="info">There are no pokemon in this region</v-alert>
+        <img
+          src="../assets/images/pokeball.png"
+          class="loading-gif noselect"
+          alt="loading-gif"
+          width="30%"
+        />
+      </v-col>
+    </v-row>
+    
     <v-row>
       <v-col
         v-for="pokemon in sortedFilteredPokemons"
@@ -60,6 +92,7 @@
                 v-for="type in pokemon.types"
                 :key="type.type.name"
                 :class="[`type_bg ${type.type.name}`]"
+                v-tooltip:bottom="type.type.name"
               >
                 <img
                   :src="`/pokeTypes/${type.type.name}.png`"
@@ -92,15 +125,17 @@ export default {
       search: "",
       pokemons: [],
       selectedRegion: null,
-      selectedType: null,
+      selectedType: "all types",
       sortBy: "id",
-      limit: 21,
+      limit: 151,
       offset: 0,
       showScrollToTop: false,
+      isLoading: false,
+      isLoadingPokemon: false,
       regions: [
         {
           name: "Kanto",
-          limit: 150,
+          limit: 151,
           offset: 0,
         },
         {
@@ -189,6 +224,7 @@ export default {
       return filteredPokemons;
     },
   },
+
   methods: {
     async fetchPokemons(limit, offset) {
       try {
@@ -206,6 +242,9 @@ export default {
       }
     },
     viewPokemon(id) {
+      if (this.sortedFilteredPokemons.length === 0) {
+        this.isLoadingPokemon = true;
+      }
       this.$router.push({ path: `/pokemon/${id}` });
     },
     getPokemonGradient(types) {
@@ -220,32 +259,58 @@ export default {
       const bottomOfWindow =
         window.innerHeight + window.scrollY >=
         document.documentElement.offsetHeight - 10;
-      if (bottomOfWindow && !this.selectedRegion) {
+
+      if (
+        bottomOfWindow &&
+        !this.isLoading &&
+        this.pokemons.length <
+          this.regions.find((region) => region.name === this.selectedRegion)
+      ) {
+        this.isLoading = true;
         this.offset += this.limit;
         this.fetchPokemons(this.limit, this.offset);
+        this.isLoading = false;
       }
+
       this.showScrollToTop = window.scrollY > 200;
     },
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    fetchRegionPokemons() {
+    async fetchRegionPokemons() {
       const region = this.regions.find((r) => r.name === this.selectedRegion);
       if (region) {
         this.limit = region.limit;
         this.offset = region.offset;
         this.pokemons = [];
-        this.fetchPokemons(this.limit, this.offset);
+        this.isLoadingPokemon = true; 
+        await this.fetchPokemons(this.limit, this.offset);
+        this.isLoadingPokemon = false; 
       }
+    },
+    saveSelections() {
+      localStorage.setItem("selectedRegion", this.selectedRegion);
+      localStorage.setItem("selectedType", this.selectedType);
+    },
+    loadSelections() {
+      const region = localStorage.getItem("selectedRegion");
+      const type = localStorage.getItem("selectedType");
+      if (region) this.selectedRegion = region;
+      if (type) this.selectedType = type;
     },
   },
   watch: {
     selectedRegion() {
+      this.saveSelections();
       this.fetchRegionPokemons();
+    },
+    selectedType() {
+      this.saveSelections();
     },
   },
   async created() {
-    this.fetchPokemons(this.limit, this.offset);
+    this.loadSelections();
+    this.fetchPokemons();
     window.addEventListener("scroll", this.handleScroll);
   },
   beforeDestroy() {
@@ -256,13 +321,23 @@ export default {
 
 <style scoped>
 .v-text-field,
-.v-select,
-.v-radio{
+.v-radio,
+.select_font,
+h1 {
   color: var(--filters);
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
 }
 
-.v-icon{
+.v-alert {
+  font-family: "Press Start 2P", cursive;
+  margin-bottom: 2rem;
+}
+
+.v-icon {
   color: var(--filters);
+}
+
+.info_container{
+  margin-top: 3rem;
 }
 </style>
